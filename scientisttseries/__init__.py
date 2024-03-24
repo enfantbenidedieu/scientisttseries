@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from scientisttools.version import __version__
+from scientisttseries.version import __version__
 
 __name__ = "scientisttseries"
 __author__ = 'Duverier DJIFACK ZEBAZE'
