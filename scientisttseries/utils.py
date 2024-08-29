@@ -1,5 +1,4 @@
-#
-
+# -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
 from statsmodels.tools import eval_measures
@@ -191,8 +190,3 @@ def compare_performance(model=list()):
         return res
     res1 = pd.concat(map(lambda x : evaluate(x[0],x[1]),enumerate(model)),axis=0)
     return res1
-        
-    
-
-
-

@@ -14,38 +14,50 @@ def ic_alpha(alpha,n):
     return st.norm.ppf((1 + (1 - alpha))/2)/np.sqrt(n)
 
 def ggtsplot(data=pd.Series,
-             xlabel=None,
-             ylabel=None,
+             x_label=None,
+             y_label=None,
              title=None,
              alpha = 1,
              color="black",
-             linetype="solid",
+             line_type="solid",
              size=0.5,
-             ggtheme = pn.theme_gray()):
+             ggtheme = pn.theme_gray()) -> pn:
     """
-    Plotting Time Series Objects. Description. Visualization functions for time series object.
+    Plotting Time Series Objects
+    ---------------------------- 
+    
+    Description
+    -----------
+    Visualization functions for time series object.
 
     Parameters:
     -----------
-    data : Pandas series.
-           Series of time-series values.
-    xlabel : str, optional.
-          labels the x-axis of the current axes or standalone visualization.   Default is 'None'.
-    ylabel : str, optional.
-        labels the y-axis of the current axes or standalone visualization. Default is 'None'.
-    title : str, optional
-        Title to place on plot.  Default is 'None'.
+    data : Pandas series. Series of time-series values.
+
+    xlabel : str, optional.labels the x-axis of the current axes or standalone visualization.   Default is 'None'.
+
+    ylabel : str, optional. labels the y-axis of the current axes or standalone visualization. Default is 'None'.
+
+    title : str, optional. Title to place on plot.  Default is 'None'.
+
     alpha : float, default = 1.
+
     color : str, default = "black".
+
     linetype : str, default = "solid".
+
     size : float, default = 0.5
 
     Return:
     -------
-    Figure
+    a plotnine
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
     if not isinstance(data,pd.Series):
-        raise ValueError("Error : 'data' must be a series. See 'https://pandas.pydata.org/docs/reference/api/pandas.Series.html'.")
+        raise TypeError("'data' must be a series. See 'https://pandas.pydata.org/docs/reference/api/pandas.Series.html'.")
 
     # Extract name
     data = data.to_frame()
@@ -53,16 +65,16 @@ def ggtsplot(data=pd.Series,
 
     # Initialise
     p = (pn.ggplot(data,pn.aes(x=data.index,y=name))+
-            pn.geom_line(alpha=alpha,color=color,linetype=linetype,size=size))
+            pn.geom_line(alpha=alpha,color=color,linetype=line_type,size=size))
 
     if title is None:
         title = name
-    if xlabel is None:
-        xlabel = "Time"
-    if ylabel is None:
-        ylabel = "value"
+    if x_label is None:
+        x_label = "Time"
+    if y_label is None:
+        y_label = "value"
     
-    p =p + pn.labs(x=xlabel,y=ylabel,title=title)
+    p =p + pn.labs(x=x_label,y=y_label,title=title)
 
     # Add Theme
     p = p + ggtheme
@@ -73,8 +85,8 @@ def ggtsplot(data=pd.Series,
 ############################################################################################################
 
 def ggacf(x, 
-          xlabel = None,
-          ylabel = None,
+          x_label = None,
+          y_label = None,
           title=None,
           auto_ylims = False,
           adjusted=False,
@@ -84,20 +96,23 @@ def ggacf(x,
           bartlett_confint=True,
           missing='none',
           zero = True,
-          ggtheme = pn.theme_gray()):
+          ggtheme = pn.theme_gray()) -> pn:
     
     """
     Plot the autocorrelation function
+    ---------------------------------
 
+    Description
+    -----------
     Plots lags on the horizontal and the correlations on vertical axis.
 
     Parameters
     ----------
     x : array_like
         Array of time-series values
-    xlabel : str, optional
+    x_label : str, optional
         labels the x-axis of the current axes or standalone visualization.   Default is 'None'
-    ylabel : str, optional
+    y_label : str, optional
         labels the y-axis of the current axes or standalone visualization. Default is 'None'
     title : str, optional
         Title to place on plot.  Default is 'None'
@@ -145,7 +160,11 @@ def ggacf(x,
 
     Returns
     -------
-    Figure
+    a plotnine
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
 
     acf_x = acf(x=x,
@@ -184,14 +203,14 @@ def ggacf(x,
         p = p + pn.ylim((-1,1))
     
     # Set xlabel, ylabel and title values
-    if xlabel is None:
-        xlabel = "Lag"
-    if ylabel is None:
-        ylabel = "ACF"
+    if x_label is None:
+        x_label = "Lag"
+    if y_label is None:
+        y_label = "ACF"
     if title is None:
         title = "Autocorrelation"
     
-    p = p +pn.labs(x=xlabel,y=ylabel,title=title)
+    p = p +pn.labs(x=x_label,y=y_label,title=title)
     
     # Add Theme
     p = p + ggtheme
@@ -204,25 +223,26 @@ def ggacf(x,
 ###############################################################################################
 
 def ggpacf(x,
-           xlabel = None,
-           ylabel = None,
+           x_label = None,
+           y_label = None,
            title = None,
            lags = None,
            alpha = 0.05,
            method="ywm",
            zero=True,
-           ggtheme = pn.theme_gray()):
+           ggtheme = pn.theme_gray()) -> pn:
     
     """
     Plot the partial autocorrelation function
+    -----------------------------------------
 
     Parameters
     ----------
     x : array_like
         Array of time-series values
-    xlabel : str, optional
+    x_label : str, optional
         labels the x-axis of the current axes or standalone visualization.   Default is 'None'
-    ylabel : str, optional
+    y_label : str, optional
         labels the y-axis of the current axes or standalone visualization. Default is 'None'
     title : str, optional
         Title to place on plot.  Default is 'None'
@@ -258,6 +278,10 @@ def ggpacf(x,
     Returns
     -------
     Figure
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
     
     pacf_x = pacf(x=x,
@@ -288,14 +312,14 @@ def ggpacf(x,
              pn.geom_hline(mapping=pn.aes(yintercept=lim0),linetype="dashed",color="blue"))
     
     # Set xlabel, ylabel and title values
-    if xlabel is None:
-        xlabel = "Lag"
-    if ylabel is None:
-        ylabel = "Partial ACF"
+    if x_label is None:
+        x_label = "Lag"
+    if y_label is None:
+        y_label = "Partial ACF"
     if title is None:
         title = "Partial Autocorrelation"
     
-    p = p + pn.xlab(xlabel)+pn.ylab(ylabel)+pn.ggtitle(title)
+    p = p + pn.labs(x=x_label,y=y_label,title=title)
     
     # Add Theme
     p = p + ggtheme
@@ -306,17 +330,36 @@ def ggpacf(x,
 #           Seasonal Plot
 ##################################################################################################
 
-def ggseasonplot(X,ylabel=None,title=None):
+def ggseasonplot(X,y_label=None,title=None) -> pn:
     """
+    Seasonal plot
+    -------------
+
+    Parameters
+    ----------
+    `X` : a pandas series
+
+    y_label : str, optional
+        labels the y-axis of the current axes or standalone visualization. Default is 'None'.
     
+    title : str, optional
+        Title to place on plot.  Default is 'None'
+    
+    Returns
+    -------
+    a plotnine
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com 
     """
     if not isinstance(X,pd.Series):
-        raise ValueError("Error : 'data' must be a series. See 'https://pandas.pydata.org/docs/reference/api/pandas.Series.html'.")
+        raise ValueError("'data' must be a series. See 'https://pandas.pydata.org/docs/reference/api/pandas.Series.html'.")
     
     # Check seasonal
     freq = pd.infer_freq(X.index)
 
-    if freq == "M":
+    if freq in ["M","ME"]:
         season = 12
         xlabel = "Month"
         xtickslabels = ["Jan","Fev","Mar","Apr","May","Jun","Jul","Aou","Sep","Oct","Nov","Dec"]
@@ -324,7 +367,7 @@ def ggseasonplot(X,ylabel=None,title=None):
         season = 7
         xlabel = "Week"
         xtickslabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    if freq in ["Q","Q-DEC"]:
+    if freq in ["Q","Q-DEC","QE-DEC","QE"]:
         season = 4
         xlabel = "Quarter"
         xtickslabels = ["Q"+str(x+1) for x in range(season)]
@@ -339,8 +382,8 @@ def ggseasonplot(X,ylabel=None,title=None):
     ## Add 
     p = p + pn.geom_line()
 
-    if ylabel is None:
-        ylabel = X.name
+    if y_label is None:
+        y_label = X.name
 
     if title is None:
         title = "Seasonal plot"
@@ -348,7 +391,7 @@ def ggseasonplot(X,ylabel=None,title=None):
     breaks = np.sort(np.unique(data.time))
     p = p + pn.scale_x_continuous(breaks = breaks, minor_breaks = None, labels = xtickslabels)
     
-    p = p + pn.labs(title=title,x=xlabel,y=ylabel)
+    p = p + pn.labs(title=title,x=xlabel,y=y_label)
     return p
 
 ########################################
@@ -361,13 +404,15 @@ def ggpredict(res,
               dynamic=False,
               alpha = 0.05,
               ggtheme = pn.theme_gray(),
-              **kwargs):
+              **kwargs) -> pn:
     
     """
+    Predict Plot
+    -----------
 
     Parameters
     ----------
-    result : Result
+    res : Result
         Any model result supporting ``get_prediction``.
     start : int, str, or datetime, optional
         Zero-indexed observation number at which to start forecasting,
@@ -399,17 +444,19 @@ def ggpredict(res,
 
     Returns
     -------
-    Figure
+    a plotnine
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
     
     pred = res.get_prediction(start=start,end=end,dynamic=dynamic,**kwargs)
     mean = pred.predicted_mean
     if isinstance(mean, (pd.Series, pd.DataFrame)):
         x = mean.index
-        #mean.plot(ax=ax, label="forecast")
     else:
         x = np.arange(mean.shape[0])
-        #ax.plot(x, mean)
     
     pred_df = pd.DataFrame({"x" : x, "y" : mean})
 
@@ -426,5 +473,3 @@ def ggpredict(res,
     p = p + ggtheme
     
     return p
-
-

@@ -52,7 +52,9 @@ def __ma_model(
     return ma_series[ma_order:]
 
 def __arma_model(params: list[float], noise: list[float]) -> list[float]:
-    """Generate discrete series using ARMA process.
+    """
+    Generate discrete series using ARMA process.
+    --------------------------------------------
 
     Args:
         params: list[float]

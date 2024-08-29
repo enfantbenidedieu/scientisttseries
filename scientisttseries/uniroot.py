@@ -1,52 +1,41 @@
-
-
-
-
+# -*- coding: utf-8 -*-
 import math
 import pandas as pd
 import numpy as np
 import warnings
-from arch import unitroot
 from sklearn.base import BaseEstimator,TransformerMixin
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
 from scientisttseries.utils import lag, diff, extractAIC,extractAICC,extractBIC, residuals
 
-
 class DF(BaseEstimator,TransformerMixin):
-    """Dickey Fuller Test
+    """
+    Dickey Fuller Test
+    ------------------
 
     Parameters
     ---------
-    y : {ndarray, Series}
-        The data to test for a unit root
-    typ : {'none','drift','trend'}, optional
-        The trend component to include in the test
+    y : {ndarray, Series} The data to test for a unit root
 
+    typ : a string specifying the trend component to include in the test. Allows values are :
         - "none" - No trend components (Default)
         - "drift" - Include a constant
         - "trend" - Include a constant and linear time trend
     
     Notes
     -----
-    The null hypothesis of the Dickey-Fuller is that there is a unit
-    root, with the alternative that there is no unit root. If the pvalue is
-    above a critical size, then the null cannot be rejected that there
-    and the series appears to be a unit root.
+    The null hypothesis of the Dickey-Fuller is that there is a unit root, with the alternative that there is no unit root. If the pvalue is above a critical size, then the null cannot be rejected that there and the series appears to be a unit root.
 
-    The p-values are obtained through regression surface approximation from
-    MacKinnon (1994) using the updated 2010 tables.
-    If the p-value is close to significant, then the critical values should be
-    used to judge whether to reject the null.
+    The p-values are obtained through regression surface approximation from MacKinnon (1994) using the updated 2010 tables. If the p-value is close to significant, then the critical values should be used to judge whether to reject the null.
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
     def __init__(self,y,typ):
         
         y = np.array(y)
         data = pd.DataFrame(y,columns=["y"])
-
-        #####################################################################
-        # Dickey - Fuller Unit root test
-        ####################################################################
 
         if typ == "none":
             lm = smf.ols(formula="y~lag(y,1)-1",data=data).fit()
@@ -150,19 +139,27 @@ class DF(BaseEstimator,TransformerMixin):
     
 # Summary df
 def summaryDF(self):
-    """Summary of Dickey - Fuller unit root test 
+    """
+    Summary of Dickey - Fuller unit root test 
+    -----------------------------------------
+
+    Usage
+    -----
+    ```python
+    >>> summaryDF(self)
+    ```
 
     Parameters
     ----------
-    self : An instance of class DF
+    `self` : an object of class DF
 
-    Returns
-    -------
-    None
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
 
     if self.model_ != "df":
-        raise ValueError("Error : 'self' must be and instance of class DF.")
+        raise ValueError("'self' must be an object of class DF")
     
     print("####"*20)
     print("#                       Dickey - Fuller Test Unit Root Test                    #")
@@ -176,29 +173,24 @@ def summaryDF(self):
     print("Critical values for test statistics :")
     print(self.cvals_)
 
-
-##########################################################################################################
-#           Augmented Dickey - Fuler (ADF) test
-###########################################################################################################
-
 class ADF(BaseEstimator,TransformerMixin):
-    """Augmented Dickey-Fuller unit root test
+    """
+    Augmented Dickey-Fuller unit root test
+    --------------------------------------
 
     Parameters:
     ----------
-    y : {ndarray, Series}
-        The data to test for a unit root
-    typ : {'none','drift','trend'}, default = 'none'
-        The trend component to include in the test
+    `y` : {ndarray, Series} The data to test for a unit root
 
+    typ : the trend component to include in the test. Allows values are :
         - "none" - No trend components (Default)
         - "drift" - Include a constant
         - "trend" - Include a constant and linear time trend
-    lags : int, optional
-        The number of lags to use in the ADF regression.
-    selectlags : {"Fixed","AIC","AICC","BIC"}, optional
-        The method to use when selecting the lag length
+    
+    lags : an integer specifying the number of lags to use in the ADF regression.
 
+    selectlags : a string specifying the method to use when selecting the lag length. Allows values are :
+        - "Fixed"
         - "AIC" - Select the minimum of the Akaike IC
         - "AICC" - Select the minimum of the Corrected Akaike IC
         - "BIC" - Select the minimum of the Schwarz/Bayesian IC
@@ -208,15 +200,13 @@ class ADF(BaseEstimator,TransformerMixin):
 
     Notes
     -----
-    The null hypothesis of the Augmented Dickey-Fuller is that there is a unit
-    root, with the alternative that there is no unit root. If the pvalue is
-    above a critical size, then the null cannot be rejected that there
-    and the series appears to be a unit root.
+    The null hypothesis of the Augmented Dickey-Fuller is that there is a unit root, with the alternative that there is no unit root. If the pvalue is above a critical size, then the null cannot be rejected that there and the series appears to be a unit root.
 
-    The p-values are obtained through regression surface approximation from
-    MacKinnon (1994) using the updated 2010 tables.
-    If the p-value is close to significant, then the critical values should be
-    used to judge whether to reject the null.
+    The p-values are obtained through regression surface approximation from MacKinnon (1994) using the updated 2010 tables. If the p-value is close to significant, then the critical values should be used to judge whether to reject the null.
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
     def __init__(self,y,typ="none",lags=1,selectlags="Fixed"):
 
@@ -364,19 +354,25 @@ class ADF(BaseEstimator,TransformerMixin):
 
 # Summary ADF
 def summaryADF(self):
-    """Summary of Augmented Dickey Fuller unit root test
+    """
+    Summary of Augmented Dickey Fuller unit root test
+    -------------------------------------------------
 
     Parameters
     ----------
-    self : An instance of class ADF.
+    `self` : an objet of class ADF.
 
     Returns
     -------
     None
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
 
     if self.model_ != "adf":
-        raise ValueError("Error : 'self' must be and instance of class ADF.")
+        raise ValueError("'self' must be an object of class ADF")
     
     print("####"*20)
     print("#                   Augmented Dickey - Fuller Unit Root Test                   #")
@@ -391,28 +387,30 @@ def summaryADF(self):
     print(self.cvals_)
 
 
-#######################################################################################################
-#     Phiulips Perron Test (PP)
-#########################################################################################################
-
-
 class PP(BaseEstimator,TransformerMixin):
-    """Phillips-Perron unit root test
+    """
+    Phillips-Perron unit root test
+    -------------------------------
 
     Parameters:
     ----------
-    x : {ndarray, Series}
-        The data to test for a unit root
+    `x` : {ndarray, Series} The data to test for a unit root
+
     typ : {'Z-tau','Z-alpha'}, default = 'Z-alpha'
+
     model : {'constant','trend'}, default = 'constant'
+
     lags : {'short','long'}, default = 'short'
+
     use_lag : int or None, optional
 
     Returns
     -------
 
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
-
     def __init__(self,x,typ="Z-alpha",model="constant",lags="short",use_lag=None):
 
         x = np.array(x)
@@ -505,12 +503,23 @@ class PP(BaseEstimator,TransformerMixin):
 # Summary PP
 def summaryPP(self):
     """
-    
-    
-    """
+     Summary of Phillips - Perron unit root test
+    --------------------------------------------
 
+    Parameters
+    ----------
+    `self` : an objet of class PP.
+
+    Returns
+    -------
+    None
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
+    """
     if self.model_ != "pp":
-        raise ValueError("Error : 'self' must be and instance of class PP.")
+        raise ValueError("'self' must be an objet of class PP")
     
     print("####"*20)
     print("#                        Phillips - Perron Unit Root Test                      #")
@@ -525,26 +534,29 @@ def summaryPP(self):
     print("\n")
     print(self.auxstat_)
 
-
-
-##############################################################################################
-#                   Kwiatkowski, Phillips, Schmidt and Shin (KPSS) stationarity test
-###########################################################################################
-
 class KPSS(BaseEstimator,TransformerMixin):
-    """Kwiatkowski, Phillips, Schmidt and Shin (KPSS) stationarity test
+    """
+    Kwiatkowski, Phillips, Schmidt and Shin (KPSS) stationarity test
+    ----------------------------------------------------------------
 
     Parameters:
     ----------
-    x : {ndarray, Series}
-        The data to test for a unit root
+    x : {ndarray, Series} The data to test for a unit root
+
     typ : {'mu','tau'}, default = 'tau '
+
     model : {'constant','trend'}, default = 'constant'
+
     lags : {'short','long',"nil"}, default = 'short'
+
     use_lag : int or None, optional
 
     Returns
-    -------      
+    -------  
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com    
     """
     def __init__(self,y,typ = "mu",lags="short",use_lag = None):
 
@@ -589,13 +601,29 @@ class KPSS(BaseEstimator,TransformerMixin):
         self.cvals_ = cvals
         self.model_ = "kpss"
 
-
-
 # Summary KPSS
 def summaryKPSS(self):
     """
-    
-    
+    Summary of Kwiatkowski, Phillips, Schmidt and Shin (KPSS) unit root test
+    ------------------------------------------------------------------------
+
+    Usage
+    -----
+    ```python
+    >>> summaryKPSS(self)
+    ```
+
+    Parameters
+    ----------
+    `self` : an objet of class ADF.
+
+    Returns
+    -------
+    None
+
+    Author(s)
+    ---------
+    Duvérier DJIFACK ZEBAZE djifacklab@gmail.com
     """
 
     if self.model_ != "kpss":
@@ -616,7 +644,6 @@ def summaryKPSS(self):
 
 class ERS(BaseEstimator,TransformerMixin):
     """
-
     Parameters
     ----------
     
